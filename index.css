@@ -28,9 +28,7 @@ body {
   width: 27vw;
 }
 
-.DiceCap-button {
-  background-color: lightblue;
-  border-radius: 25%;
+.DiceRoller-button {
   font-size: 2vw;
   height: 9vw;
   margin-top: 0.5vw;
@@ -38,10 +36,14 @@ body {
   width: 9vw;
 }
 
-.DiceRoller-button {
+.Decisive-button {
+  border-radius: 25%;
   font-size: 2vw;
   height: 9vw;
   margin-top: 0.5vw;
   text-align: center;
-  width: 9vw;
+  width: 18vw;
+}
+.Decisive-button--active {
+  background-color: orange;
 }

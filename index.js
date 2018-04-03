@@ -24,81 +24,57 @@ Then it sums the results.
 The wild die doesn't contribute to successes; it's a six-sided die that causes a Bad Luck result on a 1, and Good Luck on 6.
 */
 
-var diceCap = 6; //stores the current dice cap
+var decisive = false; //stores whether the next roll is decisive (doesn't count 10s twice)
 
-
-function handleInstructionClick() {  //toggles instructions
-  
-  if (document.getElementById("instructions").innerHTML == "") {
-    outputReplace("instructions", FULL_INSTRUCTIONS);
+function handleDecisiveClick() {
+  if (decisive) {
+    decisive = false;
+    document.getElementById("decisive").classList.remove("Decisive-button--active");
   }
   else {
-    outputReplace("instructions", "");
+    decisive = true;
+    document.getElementById("decisive").classList.add("Decisive-button--active");
   }
-  
-  
-}
-
-function handleDiceCapClick(newCap) {
-  diceCap = newCap;
-  outputReplace("currentCap", "Dice Cap: " + diceCap);
 }
 
 function handleRollClick(numDice) {
 
-  var diceTally = rollDice(numDice, diceCap);
-    outputReplace("rollTotal", "Total Roll: " + diceTally[7]);
-    outputReplace("wildDie", "Wild Die Result: " + diceTally[8]);
+  var diceTally = rollDice(numDice);
+    outputReplace("rollTotal", "Total Successes: " + diceTally);
+
+  if(decisive){
+    decisive = false;
+    document.getElementById("decisive").classList.remove("Decisive-button--active");
+  }
 }
 
-    function rollDice(numDice, maxRoll) {
-      //sets default if nothing entered for maxRoll
-      if( maxRoll == null) {
-        maxRoll = 6;
-      }
-
-      /*maxRoll sets a maximum result per die; anything above that will be dowgraded to the maximum, not rerolled; used for dice caps in some games
-      defaults maxRoll 6 */
-
-
+function rollDice(numDice) {
         var currentRoll = 0;
-        var wildRoll = 0;
-        var tempResultsStorage = [0, 0, 0, 0, 0, 0, 0, 0, ""]; //stores results for 1, 2, 3, 4, 5, and 6, respectively, ignoring index 0
-        //index 7 stores sum of all
-        //index 8 stores the results of the wild die
+        var successes = 0;
 
         if (numDice < 1 || numDice > 50) { //prevents bad inputs; number of dice must be between 1 and 50, otherwise becomes 1
           numDice = 1;
         } 
 
-        wildRoll = Math.floor(Math.random() * 6) + 1;
-        switch (wildRoll){
-          case 1:
-            tempResultsStorage[8] = wildRoll.toString() + " (Bad Luck)";
+        for(var i = 1; i <= numDice; i++){
+          currentRoll = Math.floor(Math.random() * 10) + 1;
+          
+          switch (currentRoll){
+            case 8:
+            case 9:
+              successes += 1;
+            break;
+            case 10:
+              successes += 1;
+              if(decisive === false){successes += 1} //adds a second success if not a decisive check
             break;
 
-          case 6:
-          tempResultsStorage[8] = wildRoll.toString() + " (Good Luck)";
-            break;
-
-          default:
-            tempResultsStorage[8] = wildRoll.toString() + " (---)";
-        }
-
-        for (var i = 1; i <= numDice; i++){
-            //roll dice here, tally results, do some other stuff
-            currentRoll = Math.floor(Math.random() * 6) + 1;
-            if(currentRoll > maxRoll) {currentRoll = maxRoll}; //applies maximum roll
-
-            tempResultsStorage[currentRoll] += 1;
+            default:
+              //nothing
           }
-
-
-        for (var i = 1; i <= 6; i++) {  //adds results
-          tempResultsStorage[7] += tempResultsStorage[i]*i;
         }
 
-        return tempResultsStorage;
+        return successes;
 
      };
 
