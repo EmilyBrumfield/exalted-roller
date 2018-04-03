@@ -1,18 +1,22 @@
-const FULL_INSTRUCTIONS = "Dice roller for the d6 System.<br /><b>Instructions:</b> Click the button with the number of dice to roll. <br /><b>House Rule:</b> The wild die is separate from the normal die pool and doesn't add to the total."
-
-/*D6 DICE ROLLER
-Progressiva web app that rolls D6 system dice without hassle or unnecessary clicks.
-
-d6 system is a set of tabletop role-playing game rules. It often involves rolling large handfuls of dice and
-tallying results, so I made this little app to speed things up when gaming at the computer.
-
-When a user clicks a button, the app rolls the specified number of dice, applies min and max roll, and tallies the results for each die side.
-Then it sums the results.
-
-The wild die doesn't contribute to successes; it's a six-sided die that causes a Bad Luck result on a 1, and Good Luck on 6.
-*/
+const FULL_INSTRUCTIONS = "Dice roller for the Exalted 3e.<br /><b>Instructions:</b>\
+ Click the button with the number of dice to roll. <br /><b>Decisive:</b> Click to toggle. When this\
+ is highlighted, the next roll won't double 10s. Returns to normal after one roll. Useful for\
+ decisive damage.<br /><b>Note:</b> This roller doesn't yet support double 9s, double 8s, and some\
+ of the other weird dice mechanics from certain charms."
 
 var decisive = false; //stores whether the next roll is decisive (doesn't count 10s twice)
+
+function handleInstructionClick() {  //toggles instructions
+  
+  if (document.getElementById("instructions").innerHTML == "") {
+    outputReplace("instructions", FULL_INSTRUCTIONS);
+  }
+  else {
+    outputReplace("instructions", "");
+  }
+  
+}
+
 
 function handleDecisiveClick() {
   if (decisive) {
